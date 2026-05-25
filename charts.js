@@ -70,21 +70,22 @@ function formatValue(val, unit) {
 // ECharts 图表
 // ============================================================
 function renderCharts(indicators) {
-    renderPMICPIChat(indicators);
-    renderSFM2Chat(indicators);
-    renderGDPChat(indicators);
+    try { renderPMICPIChat(indicators); } catch (e) { console.error('[Chart PMI+CPI] Error:', e); }
+    try { renderSFM2Chat(indicators); } catch (e) { console.error('[Chart SF+M2] Error:', e); }
+    try { renderGDPChat(indicators); } catch (e) { console.error('[Chart GDP] Error:', e); }
 }
 
 function renderPMICPIChat(indicators) {
     const dom = document.getElementById('chartPMICPI');
     if (!dom) return;
+    if (typeof echarts === 'undefined') { console.error('ECharts not loaded'); return; }
     const chart = echarts.init(dom);
 
     const pmiData = indicators.indicators.pmi?.history || [];
     const cpiData = indicators.indicators.cpi?.history || [];
 
     const option = {
-        darkMode: true,
+        backgroundColor: 'transparent',
         grid: { top: 10, right: 50, bottom: 30, left: 50 },
         tooltip: { trigger: 'axis' },
         legend: {
@@ -145,13 +146,14 @@ function renderPMICPIChat(indicators) {
 function renderSFM2Chat(indicators) {
     const dom = document.getElementById('chartSFM2');
     if (!dom) return;
+    if (typeof echarts === 'undefined') return;
     const chart = echarts.init(dom);
 
     const sfData = indicators.indicators.social_financing?.history || [];
     const m2Data = indicators.indicators.m2?.history || [];
 
     const option = {
-        darkMode: true,
+        backgroundColor: 'transparent',
         grid: { top: 10, right: 50, bottom: 30, left: 60 },
         tooltip: { trigger: 'axis' },
         legend: {
@@ -211,6 +213,7 @@ function renderSFM2Chat(indicators) {
 function renderGDPChat(indicators) {
     const dom = document.getElementById('chartGDP');
     if (!dom) return;
+    if (typeof echarts === 'undefined') return;
     const chart = echarts.init(dom);
 
     const gdpData = (indicators.indicators.gdp?.history || []).slice().reverse().slice(0, 16);
@@ -375,16 +378,22 @@ function setupFilters() {
 // 主入口
 // ============================================================
 async function init() {
-    const data = await loadData();
-    if (!data) {
-        document.getElementById('timeline').innerHTML = '<div class="timeline-empty"><p>数据加载失败，请检查网络连接</p></div>';
-        return;
-    }
+    try {
+        const data = await loadData();
+        if (!data) {
+            document.getElementById('timeline').innerHTML = '<div class="timeline-empty"><p>数据加载失败，请检查网络连接</p></div>';
+            return;
+        }
 
-    renderDashboard(data.indicators);
-    renderCharts(data.indicators);
-    renderTimeline(data.timeline);
-    setupFilters();
+        renderDashboard(data.indicators);
+        renderCharts(data.indicators);
+        renderTimeline(data.timeline);
+        setupFilters();
+    } catch (err) {
+        console.error('[Init] Fatal error:', err);
+        const tl = document.getElementById('timeline');
+        if (tl) tl.innerHTML = '<div class="timeline-empty"><p>页面渲染出错: ' + err.message + '</p></div>';
+    }
 }
 
 document.addEventListener('DOMContentLoaded', init);
