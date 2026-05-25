@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国宏观经济观察 | China Macro Observatory</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- ====== 页头 ====== -->
+    <header class="site-header">
+        <div class="header-left">
+            <h1 class="site-title">🏛 中国宏观经济观察</h1>
+            <p class="site-subtitle">China Macro Observatory — 数据驱动 · 每日更新</p>
+        </div>
+        <div class="header-right">
+            <div class="update-info">
+                <span class="update-dot"></span>
+                <span>最后更新：<strong id="updateTime">--</strong></span>
+                <span class="update-freq">· 每日08:00 / 16:00 / 22:00</span>
+            </div>
+            <div class="filter-bar" id="filterBar">
+                <button class="filter-btn active" data-filter="all">全部</button>
+                <button class="filter-btn" data-filter="货币政策">🔴 货币政策</button>
+                <button class="filter-btn" data-filter="财政政策">🟡 财政政策</button>
+                <button class="filter-btn" data-filter="宏观经济">🟢 宏观经济</button>
+                <button class="filter-btn" data-filter="产业政策">🔵 产业政策</button>
+                <button class="filter-btn" data-filter="房地产">🟣 房地产</button>
+                <button class="filter-btn" data-filter="国际贸易">⚪ 国际贸易</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ====== 数据仪表盘 ====== -->
+    <section class="dashboard">
+        <h2 class="section-title">📊 核心指标</h2>
+        <div class="dashboard-grid" id="dashboardGrid">
+            <!-- JS 动态填充 -->
+        </div>
+    </section>
+
+    <!-- ====== 趋势图表 ====== -->
+    <section class="charts-section">
+        <h2 class="section-title">📈 趋势图表</h2>
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>PMI & CPI 走势</h3>
+                <div class="chart-container" id="chartPMICPI"></div>
+            </div>
+            <div class="chart-card">
+                <h3>社会融资 & M2 增速</h3>
+                <div class="chart-container" id="chartSFM2"></div>
+            </div>
+            <div class="chart-card chart-card-full">
+                <h3>GDP 季度同比增速</h3>
+                <div class="chart-container" id="chartGDP"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== 政策要闻时间线 ====== -->
+    <section class="timeline-section">
+        <h2 class="section-title">📰 政策要闻</h2>
+        <div class="timeline" id="timeline">
+            <!-- JS 动态填充 -->
+        </div>
+        <div class="timeline-empty" id="timelineEmpty" style="display:none;">
+            <p>暂无数据</p>
+        </div>
+    </section>
+
+    <!-- ====== 页脚 ====== -->
+    <footer class="site-footer">
+        <p>数据来源：<strong>同花顺 iFinD</strong> · 自动采集</p>
+        <p>中国宏观经济观察 · China Macro Observatory &copy; 2026</p>
+    </footer>
+
+    <script src="charts.js"></script>
+</body>
+</html>
