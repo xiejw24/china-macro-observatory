@@ -247,18 +247,18 @@ def extract_source(url):
 # 新闻去重
 # ============================================================
 
-def deduplicate_news(articles, threshold=0.6):
-    """基于标题相似度的新闻去重"""
+def deduplicate_news(articles, threshold=0.3):
+    """基于标题相似度的新闻去重（Levenshtein编辑距离）"""
     if not articles:
         return []
-    
+
     deduped = []
     for article in articles:
         title = article.get("title", "")
         is_dup = False
         for existing in deduped:
             existing_title = existing.get("title", "")
-            if similarity(title, existing_title) > threshold:
+            if title_similarity(title, existing_title) > threshold:
                 # 保留更长的内容
                 if len(article.get("content", "")) > len(existing.get("content", "")):
                     existing.update(article)
@@ -270,17 +270,30 @@ def deduplicate_news(articles, threshold=0.6):
     return deduped
 
 
-def similarity(s1, s2):
-    """简单的标题相似度计算（基于字符重叠）"""
+def levenshtein_distance(s1, s2):
+    """计算两个字符串的 Levenshtein 编辑距离"""
+    if not s1 or not s2:
+        return max(len(s1 or ''), len(s2 or ''))
+    m, n = len(s1), len(s2)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(m + 1):
+        dp[i][0] = i
+    for j in range(n + 1):
+        dp[0][j] = j
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            cost = 0 if s1[i-1] == s2[j-1] else 1
+            dp[i][j] = min(dp[i-1][j] + 1, dp[i][j-1] + 1, dp[i-1][j-1] + cost)
+    return dp[m][n]
+
+
+def title_similarity(s1, s2):
+    """基于 Levenshtein 的标题相似度（编辑距离/标题长度）"""
     if not s1 or not s2:
         return 0.0
-    s1_set = set(s1)
-    s2_set = set(s2)
-    intersection = s1_set & s2_set
-    union = s1_set | s2_set
-    if not union:
-        return 0.0
-    return len(intersection) / len(union)
+    dist = levenshtein_distance(s1, s2)
+    max_len = max(len(s1), len(s2))
+    return 1.0 - (dist / max_len) if max_len > 0 else 0.0
 
 
 # ============================================================
@@ -354,11 +367,24 @@ def main():
     # Step 1: 采集宏观指标
     print("\n[Step 1] 采集宏观指标...")
     print(f"  共 {len(MACRO_INDICATORS)} 项指标待采集")
+    collected_indicators = {}
+    errors = []
+
     for i, indicator in enumerate(MACRO_INDICATORS, 1):
         print(f"  [{i}/{len(MACRO_INDICATORS)}] {indicator['name']}")
         print(f"       Query: {indicator['query']}")
-        # MCP 调用由 WorkBuddy 代理执行，此处为框架代码
-        print(f"       → 等待 MCP 响应...")
+        try:
+            # MCP 调用由 WorkBuddy 代理执行，此处为框架代码
+            print(f"       → 等待 MCP 响应...")
+            # collected_indicators[indicator['id']] = result
+        except Exception as e:
+            error_msg = f"采集 {indicator['name']} 失败: {e}"
+            print(f"       ❌ {error_msg}")
+            errors.append(error_msg)
+            continue
+
+    if errors:
+        print(f"\n⚠ {len(errors)} 项指标采集失败，保留上次数据")
     
     # Step 2: 采集政策新闻
     print(f"\n[Step 2] 采集政策新闻...")

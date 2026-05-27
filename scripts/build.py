@@ -17,6 +17,10 @@ def validate_data():
     errors = []
     warnings = []
 
+    # Schema 校验规则
+    REQUIRED_INDICATORS = ['gdp', 'cpi', 'pmi', 'social_financing', 'm2', 'lpr']
+    REQUIRED_NEWS_FIELDS = ['title', 'category', 'date']
+
     # 检查 indicators.json
     indicators_path = os.path.join(DATA_DIR, "indicators.json")
     if not os.path.exists(indicators_path):
@@ -26,13 +30,14 @@ def validate_data():
             with open(indicators_path, "r", encoding="utf-8") as f:
                 indicators = json.load(f)
             inds = indicators.get("indicators", {})
-            for key in ["gdp", "cpi", "pmi", "social_financing", "m2", "lpr"]:
+            # 校验必须包含的核心指标
+            for key in REQUIRED_INDICATORS:
                 if key not in inds:
-                    warnings.append(f"indicators.json 缺少指标: {key}")
+                    errors.append(f"indicators.json 缺少核心指标: {key}")
                 else:
                     latest = inds[key].get("latest", {})
                     if not latest.get("value"):
-                        warnings.append(f"{key} 缺少最新值")
+                        errors.append(f"指标 {key} 缺少最新值")
             print(f"  [OK] indicators.json: {len(inds)} 项指标")
         except Exception as e:
             errors.append(f"indicators.json 解析失败: {e}")
@@ -47,6 +52,12 @@ def validate_data():
                 timeline = json.load(f)
             events = timeline.get("events", [])
             total_entries = sum(len(day.get("entries", [])) for day in events)
+            # 校验新闻字段完整性
+            for day in events:
+                for entry in day.get("entries", []):
+                    for field in REQUIRED_NEWS_FIELDS:
+                        if not entry.get(field):
+                            warnings.append(f"新闻缺少字段 {field}: {entry.get('title', '未知')[:30]}")
             print(f"  [OK] timeline.json: {len(events)} 天, {total_entries} 条新闻")
         except Exception as e:
             errors.append(f"timeline.json 解析失败: {e}")
