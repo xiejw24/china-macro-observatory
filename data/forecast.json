@@ -1,0 +1,18 @@
+{
+  "last_updated": "2026-05-31T21:34:00.000000",
+  "forecasts": {
+    "gdp": {
+      "2026_q2": {"value": 4.8, "source": "市场一致预期", "confidence": 0.85},
+      "2026_q3": {"value": 4.9, "source": "市场一致预期", "confidence": 0.80},
+      "2026_q4": {"value": 5.0, "source": "市场一致预期", "confidence": 0.75}
+    },
+    "cpi": {
+      "2026_q2": {"value": 1.5, "source": "市场一致预期", "confidence": 0.80},
+      "2026_q3": {"value": 1.8, "source": "市场一致预期", "confidence": 0.75}
+    },
+    "pmi": {
+      "2026_q2": {"value": 50.2, "source": "市场一致预期", "confidence": 0.80},
+      "2026_q3": {"value": 50.5, "source": "市场一致预期", "confidence": 0.75}
+    }
+  }
+}

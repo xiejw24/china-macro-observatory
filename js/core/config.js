@@ -1,0 +1,45 @@
+const DEFAULT_CONFIG = {
+  dashboard: {
+    indicators: [
+      { key: 'gdp', name: 'GDP同比增速', unit: '%', show: true, order: 1 },
+      { key: 'cpi', name: 'CPI当月同比', unit: '%', show: true, order: 2 },
+      { key: 'pmi', name: '制造业PMI', unit: '%', show: true, order: 3 },
+      { key: 'social_financing', name: '社会融资规模', unit: '亿元', show: true, order: 4 },
+      { key: 'm2', name: 'M2同比增速', unit: '%', show: true, order: 5 },
+      { key: 'lpr', name: '1年期LPR', unit: '%', show: true, order: 6 },
+      { key: 'industrial_value_added', name: '工业增加值同比', unit: '%', show: true, order: 7 },
+      { key: 'retail_sales', name: '社零同比', unit: '%', show: true, order: 8 },
+      { key: 'fixed_investment', name: '固投累计同比', unit: '%', show: true, order: 9 },
+      { key: 'trade_balance', name: '进出口总额', unit: '亿美元', show: true, order: 10 },
+      { key: 'unemployment', name: '城镇调查失业率', unit: '%', show: true, order: 11 },
+      { key: 'ppi', name: 'PPI当月同比', unit: '%', show: true, order: 12 }
+    ]
+  },
+  charts: {
+    pmi_cpi: { title: 'PMI & CPI 走势' },
+    social_m2: { title: '社会融资 & M2 增速' },
+    gdp: { title: 'GDP 季度同比增速' },
+    industry: { title: '制造业 PMI 细分对比' }
+  },
+  news: {
+    update_frequency: 'daily',
+    max_entries_per_day: 20,
+    categories: ['货币政策', '财政政策', '宏观经济', '产业政策', '房地产', '国际贸易']
+  }
+};
+
+export function getConfig(userConfig = {}) {
+  return deepMerge(DEFAULT_CONFIG, userConfig);
+}
+
+function deepMerge(target, source) {
+  const result = { ...target };
+  for (const key of Object.keys(source)) {
+    if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+      result[key] = deepMerge(result[key] || {}, source[key]);
+    } else {
+      result[key] = source[key];
+    }
+  }
+  return result;
+}

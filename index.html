@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国宏观经济观察 | China Macro Observatory</title>
+    <meta name="description" content="中国宏观经济观察 — 实时追踪GDP、CPI、PMI、社融、M2等核心指标，每日更新政策要闻时间线。数据来源：同花顺 iFinD。">
+    <meta name="keywords" content="中国宏观经济,GDP,CPI,PMI,社会融资,M2,LPR,货币政策,财政政策">
+    <meta property="og:title" content="中国宏观经济观察 | China Macro Observatory">
+    <meta property="og:description" content="数据驱动的中国宏观经济追踪平台，每日更新核心指标与政策要闻。">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="zh_CN">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- ====== 页头 ====== -->
+    <header class="site-header">
+        <div class="header-left">
+            <h1 class="site-title">🏛 中国宏观经济观察</h1>
+            <p class="site-subtitle">China Macro Observatory — 数据驱动 · 每日更新</p>
+        </div>
+        <div class="header-right">
+            <div class="update-info">
+                <span class="update-dot"></span>
+                <span>最后更新：<strong id="updateTime">--</strong></span>
+                <span class="update-freq">· 每日08:00 / 16:00 / 22:00</span>
+            </div>
+            <div class="filter-bar" id="filterBar">
+                <button class="filter-btn active" data-filter="all">全部</button>
+                <button class="filter-btn" data-filter="货币政策">🔴 货币政策</button>
+                <button class="filter-btn" data-filter="财政政策">🟡 财政政策</button>
+                <button class="filter-btn" data-filter="宏观经济">🟢 宏观经济</button>
+                <button class="filter-btn" data-filter="产业政策">🔵 产业政策</button>
+                <button class="filter-btn" data-filter="房地产">🟣 房地产</button>
+                <button class="filter-btn" data-filter="国际贸易">⚪ 国际贸易</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ====== 数据仪表盘 ====== -->
+    <section class="dashboard">
+        <h2 class="section-title">📊 核心指标</h2>
+        <div class="dashboard-grid" id="dashboardGrid">
+            <!-- JS 动态填充 -->
+        </div>
+    </section>
+
+    <!-- ====== 趋势图表 ====== -->
+    <section class="charts-section">
+        <h2 class="section-title">📈 趋势图表</h2>
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>PMI & CPI 走势</h3>
+                <div class="chart-container" id="chartPMICPI"></div>
+            </div>
+            <div class="chart-card">
+                <h3>社会融资 & M2 增速</h3>
+                <div class="chart-container" id="chartSFM2"></div>
+            </div>
+            <div class="chart-card chart-card-full">
+                <h3>GDP 季度同比增速</h3>
+                <div class="chart-container" id="chartGDP"></div>
+            </div>
+            <div class="chart-card chart-card-full">
+                <h3>制造业 PMI 细分对比</h3>
+                <div class="chart-container" id="chartIndustry"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== 数据分析 ====== -->
+    <section class="analytics-section">
+        <h2 class="section-title">🔍 数据分析</h2>
+        <div class="analytics-tabs">
+            <button class="analytics-tab active" data-tab="comparison">时间序列对比</button>
+            <button class="analytics-tab" data-tab="correlation">相关性分析</button>
+            <button class="analytics-tab" data-tab="export">数据导出</button>
+        </div>
+        <div class="analytics-content" id="analyticsComparison">
+            <div class="chart-card">
+                <h3>指标对比</h3>
+                <p class="chart-hint">点击仪表盘指标添加到对比</p>
+                <div class="chart-container" id="chartComparison" style="display:none;"></div>
+            </div>
+        </div>
+        <div class="analytics-content" id="analyticsCorrelation" style="display:none;">
+            <div class="correlation-container" id="correlationMatrix"></div>
+        </div>
+        <div class="analytics-content" id="analyticsExport" style="display:none;">
+            <div class="export-container">
+                <h3>导出数据</h3>
+                <div class="export-controls">
+                    <div class="export-format">
+                        <button class="export-btn" data-format="csv">📊 导出 CSV</button>
+                        <button class="export-btn" data-format="excel">📈 导出 Excel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== 政策要闻时间线 ====== -->
+    <section class="timeline-section">
+        <h2 class="section-title">📰 政策要闻</h2>
+        <div class="timeline" id="timeline">
+            <!-- JS 动态填充 -->
+        </div>
+        <div class="timeline-empty" id="timelineEmpty" style="display:none;">
+            <p>暂无数据</p>
+        </div>
+    </section>
+
+    <!-- ====== 页脚 ====== -->
+    <footer class="site-footer">
+        <p>数据来源：<strong>同花顺 iFinD</strong> · 自动采集</p>
+        <p>中国宏观经济观察 · China Macro Observatory &copy; 2026</p>
+    </footer>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
