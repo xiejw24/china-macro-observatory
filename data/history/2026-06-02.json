@@ -1,7 +1,7 @@
 {
   "date": "2026-06-02",
   "timeline": {
-    "last_updated": "2026-06-02T00:25:00.000000",
+    "last_updated": "2026-06-02T02:19:16.645031",
     "events": [
       {
         "date": "2026-06-01",
@@ -81,7 +81,7 @@
     ]
   },
   "indicators": {
-    "last_updated": "2026-06-02T00:25:00.000000",
+    "last_updated": "2026-06-02T02:19:16.644152",
     "indicators": {
       "gdp": {
         "name": "GDP同比增速",
