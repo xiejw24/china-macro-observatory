@@ -344,6 +344,7 @@ def archive_snapshot(today_str):
             archive["indicators"] = json.load(f)
     
     archive_path = os.path.join(HISTORY_DIR, f"{today_str}.json")
+    os.makedirs(HISTORY_DIR, exist_ok=True)
     with open(archive_path, "w", encoding="utf-8") as f:
         json.dump(archive, f, ensure_ascii=False, indent=2)
     
